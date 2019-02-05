@@ -1,12 +1,15 @@
 package com.reedcwilson.amica;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,8 +21,10 @@ import com.reedcwilson.amica.model.Interaction;
 import com.reedcwilson.amica.model.Job;
 import com.reedcwilson.amica.model.LovedOne;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,14 +33,15 @@ import static java.util.Calendar.DATE;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 
-public class DisplayContactActivity extends AppCompatActivity {
+public class EditContactActivity extends AppCompatActivity
+        implements KeyValueFragment.KeyValueDialogListener {
 
     private Contact contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_contact);
+        setContentView(R.layout.activity_edit_contact);
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
@@ -46,10 +52,19 @@ public class DisplayContactActivity extends AppCompatActivity {
         nameView.setText(contact.getName());
 
         Date birthday = contact.getBirthday();
-        if (birthday != null) {
-            TextView birthdayView = findViewById(R.id.birthday);
-            birthdayView.setText(formatBirthday(birthday));
-        }
+        final Calendar myCalendar = Calendar.getInstance();
+        EditText birthdayEditText = findViewById(R.id.birthday);
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel(birthdayEditText, myCalendar);
+        };
+        birthdayEditText.setOnClickListener(v -> new DatePickerDialog(EditContactActivity.this, date, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+        myCalendar.setTime(birthday);
+        updateLabel(birthdayEditText, myCalendar);
 
         String notes = contact.getNotes();
         TextView notesView = findViewById(R.id.notes);
@@ -153,11 +168,24 @@ public class DisplayContactActivity extends AppCompatActivity {
         }
     }
 
-    public void editContact(View view) {
-        Intent intent = new Intent(this, EditContactActivity.class);
-        Gson gson = new Gson();
-        intent.putExtra(Contact.class.toString(), gson.toJson(contact));
-        startActivity(intent);
+    private void updateLabel(EditText editText, Calendar myCalendar) {
+        editText.setText(DATE_FORMAT.format(myCalendar.getTime()));
+    }
+
+    @Override
+    public void onKeyValueSet(KeyValueFragment dialog, KeyValueDialogType type, CrudType operation) {
+        switch (type) {
+            case LOVED_ONE:
+//                contact.getLovedOnes().add(LovedOne.builder()
+//                        .name(dialog.getKey())
+//                        .birthday(new GregorianCalendar(dialog.getValue()))
+//                        .build());
+                break;
+            case JOB:
+                break;
+            case FAVORITE:
+                break;
+        }
     }
 
     private static class ListUtils {

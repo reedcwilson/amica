@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
-    tools:context=".DisplayContactActivity">
+    tools:context=".EditContactActivity">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <EditText
             android:id="@+id/name"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
@@ -19,20 +19,19 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:textSize="32sp"
-            app:layout_constraintEnd_toStartOf="@+id/editBtn"
+            app:layout_constraintEnd_toStartOf="@+id/saveBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/editBtn"
+            android:id="@+id/saveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:onClick="editContact"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            app:srcCompat="@android:drawable/ic_menu_save" />
 
         <TextView
             android:id="@+id/birthdaytext"
@@ -44,15 +43,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
-        <TextView
+        <EditText
             android:id="@+id/birthday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
+            android:inputType="date"
             android:text="@string/unknown"
+            android:textSize="14sp"
+            android:focusable="false"
             app:layout_constraintStart_toEndOf="@+id/birthdaytext"
             app:layout_constraintTop_toBottomOf="@+id/name" />
+
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/notesView"
@@ -61,14 +64,14 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:scrollbars="vertical"
             android:maxHeight="140dp"
+            android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/birthdaytext">
 
-            <TextView
+            <EditText
                 android:id="@+id/notes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -150,6 +153,7 @@
                 android:layout_marginTop="4dp" />
 
         </LinearLayout>
+
 
 
     </android.support.constraint.ConstraintLayout>
